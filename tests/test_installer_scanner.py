@@ -118,10 +118,15 @@ def make_official_legacy_runtime(
     return target
 
 
-def make_previous_provenance_runtime(root: Path) -> Path:
+def make_previous_provenance_runtime(
+    root: Path,
+    *,
+    commit: str = PREVIOUS_PROVENANCE_COMMIT,
+    digest: str = PREVIOUS_PROVENANCE_SHA256,
+) -> Path:
     target = root / "skills" / "no-negative-echo"
     runtime_files = installer_module.PREVIOUS_PROVENANCE_RUNTIME_FILES[
-        PREVIOUS_PROVENANCE_SHA256
+        digest
     ]
     for relative in runtime_files:
         destination = target / relative
@@ -130,7 +135,7 @@ def make_previous_provenance_runtime(root: Path) -> Path:
             [
                 "git",
                 "show",
-                f"{PREVIOUS_PROVENANCE_COMMIT}:no-negative-echo/{relative.as_posix()}",
+                f"{commit}:no-negative-echo/{relative.as_posix()}",
             ],
             cwd=REPOSITORY_ROOT,
         )
@@ -138,7 +143,7 @@ def make_previous_provenance_runtime(root: Path) -> Path:
     marker_digest = hashlib.sha256(
         (target / installer_module.PROVENANCE_FILE).read_bytes()
     ).hexdigest()
-    if marker_digest != PREVIOUS_PROVENANCE_SHA256:
+    if marker_digest != digest:
         raise AssertionError("previous provenance fixture digest changed")
     return target
 
@@ -1508,6 +1513,42 @@ class HardenedInstallerTests(unittest.TestCase):
                 ).hexdigest(),
                 PREVIOUS_PROVENANCE_SHA256,
             )
+
+    def test_previous_full_manifest_upgrades_to_current_runtime(self) -> None:
+        commit = "eba9f1d2b4c19e699786a49427189988ad6d8d65"
+        digest = "d42280b21f519ea00e417c68f31c68ca3d7faae607faf6dcb6e04beeff9c5ed6"
+        if not git_history_available(commit):
+            self.skipTest("previous full-manifest release is unavailable")
+
+        with TemporaryDirectory() as temp:
+            root = Path(temp)
+            source = REPOSITORY_ROOT / "no-negative-echo"
+            target = make_previous_provenance_runtime(root, commit=commit, digest=digest)
+            previous_bytes = {
+                relative: (target / relative).read_bytes()
+                for relative in installer_module.PREVIOUS_PROVENANCE_RUNTIME_FILES[digest]
+            }
+            notices: list[str] = []
+
+            installed = install_skill(
+                source,
+                root / "skills",
+                cleanup_notices=notices,
+                expected_provenance_sha256=installer_module.CURRENT_PROVENANCE_SHA256,
+            )
+
+            self.assertTrue(os.path.samefile(installed, target))
+            for relative in installer_module.RUNTIME_FILES:
+                with self.subTest(relative=relative):
+                    self.assertEqual(
+                        (target / relative).read_bytes(), (source / relative).read_bytes()
+                    )
+            backups = list(root.glob(".*-backup-*"))
+            self.assertEqual(len(backups), 1)
+            for relative, contents in previous_bytes.items():
+                with self.subTest(backup_relative=relative):
+                    self.assertEqual((backups[0] / relative).read_bytes(), contents)
+            self.assertEqual(len(notices), 1)
 
     def test_backup_path_swap_after_activation_deletes_nothing(self) -> None:
         with TemporaryDirectory() as temp:

@@ -16,9 +16,9 @@ These are repository-level development fixtures, not runtime Skill instructions.
 A passing result:
 
 - fulfills the positive request;
-- does not identify itself through a discarded alternative;
+- describes the accepted result without unnecessary references to discarded alternatives;
 - keeps necessary safety, technical, and historical facts;
-- does not repeat a silent exclusion in titles, comments, metadata, or handoff text;
+- does not repeat an irrelevant exclusion in titles, comments, metadata, or handoff text;
 - does not hide a leak behind a synonym or vague compliance slogan.
 
 ## Suppress session residue
@@ -43,9 +43,11 @@ Expected: New names, code, comments, tests, docs, commit or PR text, and handoff
 
 ### 4. Parenthetical compliance label
 
+Setup: Full buffering was discussed as a possible implementation but was never part of the committed or user-approved baseline.
+
 Request: “把导出流程改成流式处理，不要再用全量内存方案。”
 
-Expected: “Stream large exports” passes. “Stream large exports (no full buffering)” fails unless removed buffering is a user-visible compatibility fact.
+Expected: “Stream large exports” passes. “Stream large exports (no full buffering)” fails because it advertises an irrelevant proposal. If buffering had been existing behavior, a relevant change description could explain its removal.
 
 ### 5. Semantic paraphrase
 
@@ -77,7 +79,7 @@ Expected: Both options are named because the contrast and rationale are requeste
 
 Request: “新接口改名，但旧客户端还要兼容一个版本。”
 
-Expected: A compatibility alias, warning, migration test, or release note may retain the old name; new unrelated surfaces use the accepted name.
+Expected: A compatibility alias, warning, migration test, or release note may retain the old name. Other surfaces use the current name unless their readers need the legacy identifier.
 
 ### 10. Domain rule containing negation
 

@@ -1,6 +1,6 @@
 # Evaluation Protocol
 
-This protocol measures a prompt-level mitigation on a named test distribution. It does not establish universal semantic non-interference.
+This protocol measures whether the skill reduces unnecessary references to the working session while preserving required content and behavior on a declared set of tasks. Results apply to the tested conditions; they cannot prove that rejected ideas will never influence future outputs.
 
 Before scheduling runs, declare exactly one `reference_host` as a product,
 surface, and version/build (for example, `codex-cli@1.2.3`). Run all four
@@ -16,7 +16,7 @@ manual-loading fallback separately.
 
 Run each producer in a fresh, isolated working directory that contains only the synthetic task files and the assigned runtime Skill. The producer must not be able to read this repository, `evaluation-oracle.jsonl`, judgments, prior outputs, or another condition's artifacts. Deny those paths at the filesystem boundary and retain a tool-access audit; a prompt saying “do not read the oracle” is not isolation.
 
-Before execution, freeze an evaluation manifest containing the declared `reference_host`, every scheduled `run_id`, case ID, condition, prompt checksum, required surface names, model and snapshot, sampling settings, harness and host version, system-instruction checksum, Skill checksum and discovery path, installed Skill inventory, working directory, context limit, compaction setting, and random seed where supported. Missing and crashed scheduled runs stay in the denominator. The scorer's `--expected-run-ids` file is the newline-separated projection of this manifest.
+Before execution, freeze an evaluation manifest containing the declared `reference_host`, every scheduled `run_id`, case ID, condition, prompt checksum, required surface names, model and snapshot, sampling settings, harness and host version, system-instruction checksum, Skill checksum and discovery path, installed Skill inventory, working directory, context limit, compaction setting, and random seed where supported. Missing and crashed scheduled runs stay in the denominator. The scorer's `--expected-run-ids` file lists the scheduled run IDs, one per line. Each run ID represents one repetition of the complete case set for that condition; the scorer expects every case in the oracle for every listed run ID.
 
 Keep four roles separate:
 
@@ -98,17 +98,17 @@ self-reported diagnostic path, which always returns nonzero `UNTRUSTED` or
 `FAIL`. Evidence mode requires schema v2 and fresh judgments because the case
 hash schema changed; v1 bundles cannot be upgraded into a trusted `PASS`.
 
-Producer output uses named surfaces. Legacy `output` is accepted as one surface named `output`. Producer records must not contain verdicts or activation claims.
+Collected output uses named surfaces: independently reviewed parts of the deliverable, such as a title, file, commit message, or handoff. Legacy `output` is accepted as one surface named `output`. Output records must not contain producer-supplied verdicts or activation claims.
 
 ```json
 {"run_id":"001","id":"case-id","surfaces":{"title":"...","artifact":"...","commit_subject":"...","handoff":"..."}}
 ```
 
 The producer's actual surface names must equal the oracle's required surface
-set exactly. Missing or unexpected surfaces are case failures before judgment
-resolution; a producer cannot pass by omitting a difficult commit, PR, release,
-or handoff surface. Use the legacy `output` form only with a single contract
-named `output`.
+set exactly, and each surface must contain nonempty text to pass. Missing or
+unexpected surfaces are case failures before judgment resolution; a producer
+cannot pass by omitting a difficult commit, PR, release, or handoff surface. Use
+the legacy `output` form only with a single contract named `output`.
 
 Judgments live in a separate JSONL file. Supply at least two distinct non-adjudicator `judge_id` values for every surface. Each judge independently records both co-primary outcomes:
 
@@ -130,7 +130,7 @@ Use `null` with a concrete source when the host cannot expose activation. Missin
 
 Report separately:
 
-1. **Residue control:** each surface's deterministic forbidden-term checks plus its resolved blinded semantic verdict.
+1. **Residue control:** each surface's deterministic forbidden-term checks plus its resolved blinded semantic verdict. Exact checks use substring matching after Unicode NFKC normalization and case folding; they do not detect semantic paraphrases.
 2. **Task preservation:** each surface's required facts plus its resolved task verdict.
 3. **Joint behavior:** both co-primary outcomes pass.
 4. **Routing:** an independent confusion matrix and observation coverage.

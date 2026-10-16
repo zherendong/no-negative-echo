@@ -1,12 +1,12 @@
 # Install no-negative-echo
 
-Install only the runtime Skill from
+Install only the runtime skill from
 <https://github.com/LB623/no-negative-echo>. Do not inspect, modify, or install
 unrelated skills, packages, repositories, or host configuration.
 
 ## Default installation
 
-If the host provides an official Skill installer, use it to install the
+If the host provides an official skill installer, use it to install the
 repository's `no-negative-echo/` subdirectory. On Codex, prefer
 `$skill-installer` and verify discovery in a new session.
 
@@ -23,13 +23,14 @@ Otherwise, use the bundled installer:
    | GitHub Copilot CLI | `copilot` | `~/.copilot/skills` |
 
    These presets apply to local hosts with persistent filesystems. Do not guess
-   a destination for cloud, review, web, or ephemeral agents.
+   a destination for agents running in cloud, review, web, or temporary environments.
 
-2. Clone the repository into a new temporary directory, then run from its root:
+2. Clone the repository into a new temporary directory, then run from its root.
+   Use the installer, runtime directory, and expected digest from the same revision:
 
    ```bash
    python3 -I -B scripts/install_skill.py \
-     --expected-provenance-sha256 d42280b21f519ea00e417c68f31c68ca3d7faae607faf6dcb6e04beeff9c5ed6 \
+     --expected-provenance-sha256 742aa92626d1fb6e18f921a0bd321c258455a215934c8f5029c19b216b59f07e \
      --agent HOST_PRESET
    ```
 
@@ -38,26 +39,28 @@ Otherwise, use the bundled installer:
    request credentials.
 
 3. Treat exit status 0 plus the printed `Installed no-negative-echo to ...`
-   path as successful file installation. If the host cannot reload Skills in
-   the current session, report that discovery needs a new session; do not run
+   path as successful file installation. This does not establish host activation.
+   If the host cannot reload skills in the current session, report that discovery
+   needs a new session; do not run
    unrelated work merely to prove activation.
 
 4. Remove only the temporary clone created for this installation.
 
 The bundled installer performs the package checks itself: it validates the
-provenance marker, exact runtime manifest and file hashes, known conflicting
-user-level locations, destination, staging, locking, and post-copy bytes. For a
-normal release installation, do **not** duplicate that work by reading every
+provenance manifest and file hashes, checks known conflicting installation
+locations, and verifies the destination, coordination locks, staged copy, and
+installed files. For a normal release installation, do **not** duplicate that
+work by reading every
 repository Python file, running the repository test suite, enumerating unrelated
-Skill directories, or inspecting unrelated `package.json` files.
+skill directories, or inspecting unrelated `package.json` files.
 
 ## Custom destinations and audits
 
-For a custom destination, use only a documented Skill root for that host:
+For a custom destination, use only a documented skill root for that host:
 
 ```bash
 python3 -I -B scripts/install_skill.py \
-  --expected-provenance-sha256 d42280b21f519ea00e417c68f31c68ca3d7faae607faf6dcb6e04beeff9c5ed6 \
+  --expected-provenance-sha256 742aa92626d1fb6e18f921a0bd321c258455a215934c8f5029c19b216b59f07e \
   --skills-dir /absolute/path/to/skills \
   --discovery-root /absolute/path/to/skills
 ```

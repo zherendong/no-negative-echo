@@ -56,7 +56,7 @@ https://raw.githubusercontent.com/LB623/no-negative-echo/main/INSTALL.md
 git clone https://github.com/LB623/no-negative-echo.git
 cd no-negative-echo
 python3 -I -B scripts/install_skill.py \
-  --expected-provenance-sha256 d42280b21f519ea00e417c68f31c68ca3d7faae607faf6dcb6e04beeff9c5ed6 \
+  --expected-provenance-sha256 742aa92626d1fb6e18f921a0bd321c258455a215934c8f5029c19b216b59f07e \
   --agent codex
 ```
 

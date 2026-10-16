@@ -28,24 +28,26 @@ An agent corrects its implementation, then lets the rejected proposal leak into 
 + Title: Tomato and Egg Stir-fry
 ```
 
-`no-negative-echo` is an [Agent Skills](https://agentskills.io/specification)-format skill. It has agents regenerate delivery text from the accepted, verified state and check delivery surfaces for session residue.
+`no-negative-echo` is a skill in the [Agent Skills](https://agentskills.io/specification) format. It helps agents write self-contained deliverables from the accepted, verified result and review every place where unnecessary references to the working session could remain.
+
+A **negative echo** is an unnecessary reference to a discarded idea or revision instruction, often disguised as a disclaimer. A **surface** is any user-visible part of a deliverable or its accompanying text, including filenames, metadata, commit messages, and the final reply. The skill reviews each surface according to what its readers need.
 
 Use it to:
 
-- Write commit messages, PR titles, and descriptions from the final diff
+- Write commit messages, PR titles, and descriptions from the final diff for the task
 - Rewrite article titles, openings, UI copy, or handoffs
 - Finalize work after long conversations, collaboration, or multiple revisions
 
 ## Ways to use it
 
-Install the Skill when you need its decision workflow, scanner, and high-assurance mode. Add the compact instructions to `AGENTS.md` when you only want the current project to follow the core rule continuously. You can use both approaches together.
+Install the skill when you need its decision workflow, text scanner, and additional checks for sensitive information or actions that are difficult to reverse. Add the compact instructions to `AGENTS.md` to make the core rule part of the project's standing instructions. You can use both approaches together.
 
-### Option 1: Install the Skill
+### Option 1: Install the skill
 
-Ask an agent with network, terminal, and file permissions to follow the installation contract:
+Ask an agent with network, terminal, and file permissions to follow the installation instructions:
 
 ```text
-Install the no-negative-echo Skill:
+Install the no-negative-echo skill:
 https://raw.githubusercontent.com/LB623/no-negative-echo/main/INSTALL.md
 Report the installation result and whether a new session or restart is needed.
 If verification is unavailable, do not claim that installation succeeded.
@@ -57,24 +59,24 @@ Local Codex example:
 git clone https://github.com/LB623/no-negative-echo.git
 cd no-negative-echo
 python3 -I -B scripts/install_skill.py \
-  --expected-provenance-sha256 d42280b21f519ea00e417c68f31c68ca3d7faae607faf6dcb6e04beeff9c5ed6 \
+  --expected-provenance-sha256 742aa92626d1fb6e18f921a0bd321c258455a215934c8f5029c19b216b59f07e \
   --agent codex
 ```
 
-The installer validates provenance, the runtime manifest, destination conflicts, and post-copy bytes itself. A default installation does not require reading every Python file, running the full test suite, or enumerating unrelated Skills first. See [INSTALL.md](INSTALL.md) for other hosts, custom destinations, and high-assurance audits.
+Use the installer, runtime files, and expected digest from the same revision. The installer checks the provenance manifest, file hashes, destination conflicts, and installed files. These checks establish byte integrity; they do not authenticate the publisher or prove that the host has activated the skill. A normal installation does not require reading every Python file, running the full test suite, or listing unrelated skills. See [INSTALL.md](INSTALL.md) for other hosts, custom destinations, and installation audits.
 
-Explicitly invoke the Skill before an important delivery:
+Explicitly invoke the skill before an important delivery:
 
 ```text
-Use the no-negative-echo Skill.
+Use $no-negative-echo.
 Based on the final diff, write the commit subject, PR title, PR body, and handoff.
 ```
 
 For editorial work:
 
 ```text
-Use the no-negative-echo Skill.
-Rewrite the title and opening from the final retained body.
+Use $no-negative-echo.
+Rewrite the title and opening to reflect the final article body.
 ```
 
 ### Option 2: Add it to the project's AGENTS.md
@@ -84,38 +86,42 @@ If you only need the core behavior, append the following instructions to `AGENTS
 ```markdown
 ## No Negative Echo
 
-When producing final artifacts and their wrappers, including titles, filenames,
-body text, comments, labels, commits, PRs, and handoffs, describe only the
-accepted final state. Assume the reader did not see this session.
+When producing final deliverables and accompanying text, including titles,
+filenames, body text, comments, labels, metadata, commit messages, PRs, and
+handoffs, describe the accepted result and the facts readers need. Assume
+the reader did not see the working session.
 
-- Treat session-only rejections, intermediate attempts, and wording corrections as control information. Do not make them the name or narrative center of the final artifact.
-- Judge each delivery surface separately: Would a reader who did not see this session need the information? Would omission make the result inaccurate, unsafe, misleading, or incomplete for compatibility? Is it a real change from the state committed or approved when the task began, and does this surface need to explain it?
-- “Do not mention X” does not mean “write X-free.” Regenerate titles, filenames, openings, and labels from the positive target instead of editing rejected wording token by token.
-- Preserve real baseline changes, executed external actions, and necessary technical names, diagnostics, tests, and snapshots. User changes that existed before the task are not rejected content.
-- Do not include unrelated changes in this task's commit, PR, or handoff. Keep comparisons, quotations, audits, and migration explanations only when the user requests them or the current surface requires them.
-- After writing, reread all user-visible content and wrappers, including filenames, metadata, and hook rewrites. Recheck after any change. Do not add “cleaned” or “no residue” claims.
+- Use rejected proposals, intermediate attempts, and wording corrections to guide the work. Omit them from the deliverable unless its readers need them.
+- Evaluate each surface separately: Would its readers need this information? Would omission make it inaccurate, unsafe, misleading, incompatible, or noncompliant? Does it need to explain a real change from the relevant committed, released, or user-approved baseline?
+- An instruction to omit a subject does not justify an assurance that it is absent. Rewrite titles, filenames, openings, and labels from the requested outcome when they still revolve around a discarded idea.
+- Preserve real changes, external actions that actually occurred, and necessary technical names, constraints, diagnostics, tests, and snapshots. Pre-existing user edits are not rejected drafts, even if uncommitted.
+- Base commit messages, PRs, and handoffs on changes attributable to this task and results actually inspected. Keep comparisons, quotations, audits, and migration explanations when requested or needed for that surface.
+- Review all user-visible text and metadata, including actual results after hooks or external tools modify them. Recheck after changes. Report material failures and verification limits, without adding an assurance that repeats an irrelevant exclusion.
 ```
 
 This option depends on the agent supporting `AGENTS.md`. Codex reads project instructions at the start of each run; after changing the file, start a new run or session to load the latest version. See the [official OpenAI documentation](https://learn.chatgpt.com/docs/agent-configuration/agents-md) for discovery details.
 
-The `AGENTS.md` option does not install the Skill and cannot use `scripts/check_surface.py` or the high-assurance workflow. When both approaches are present, `AGENTS.md` supplies the persistent core rule and the Skill adds full validation for important deliveries.
+The `AGENTS.md` instructions alone do not install the scanner or include the extended verification workflow. When both approaches are present, `AGENTS.md` supplies the standing core rule and the skill provides the detailed review process.
 
 ## Decision rule
 
 | Content | Treatment |
 |---|---|
-| A proposal discussed only in the session and absent from the final baseline | Omit |
-| Assistant drafts, intermediate attempts, and wording corrections | Omit |
-| Released API removals, migrations, and external operations | State accurately |
+| A discarded proposal or intermediate attempt from the working session that readers do not need | Omit |
+| A revision instruction repeated as a disclaimer or an assurance that it was followed | Omit |
+| Actual removals of released APIs, migrations, and completed external actions | Describe accurately where relevant |
 | Facts required for safety, law, compatibility, or audit | Keep |
 | Comparisons, quotations, or decision records explicitly requested by the user | Keep |
+| Necessary technical constraints or requirements expressed as prohibitions | Keep |
 | User changes that existed before the task | Preserve attribution; do not claim them as task output |
+
+The **baseline** is the appropriate comparison point for the task, such as a PR merge base, starting committed state, released version, or user-approved document. A temporary assistant draft is not automatically a baseline. Uncommitted user work is not automatically a discarded draft.
 
 For every surface, ask:
 
 1. Would a reader who never saw the session need this information?
-2. Would omission make the result inaccurate, unsafe, misleading, or incompatible?
-3. Is it a real change in the authoritative baseline that this surface needs to explain?
+2. Would omission make the result inaccurate, unsafe, misleading, incompatible, or noncompliant?
+3. Is it a real change from the relevant baseline that this surface needs to explain?
 
 Something having been discussed or rejected is not, by itself, a reason to mention it.
 
@@ -123,13 +129,13 @@ Something having been discussed or rejected is not, by itself, a reason to menti
 
 This is a prompt-level mitigation, not a deterministic filter:
 
-- Discovery does not prove activation; explicitly invoke it for important delivery work.
+- Being listed as an available skill does not prove activation; explicitly invoke it for important delivery work.
 - It cannot erase context already read by a model or control tool logs and host UI.
-- Its bundled scanner checks text, filenames, and suspicious Unicode only; `PASS` is not a semantic review.
+- Its bundled scanner checks explicitly supplied text files and filenames for normalized substring matches and certain invisible or bidirectional Unicode characters. `--root` adds checks of relative directory names; it does not scan a directory recursively. `PASS` does not establish semantic correctness or preservation of required facts.
 - Do not change APIs, migrations, tests, snapshots, or pre-existing user work merely to satisfy this skill.
 - Use dedicated tools for credentials, privacy, and compliance checks.
 
-See [SKILL.md](no-negative-echo/SKILL.md) for the default workflow. Sensitive data, public release, and strict validation load [high-assurance-finalization.md](no-negative-echo/references/high-assurance-finalization.md) only when needed.
+See [SKILL.md](no-negative-echo/SKILL.md) for the core workflow and a complete scanner command. Read [high-assurance-finalization.md](no-negative-echo/references/high-assurance-finalization.md) for sensitive information, public sharing, changes that are difficult to reverse, delegated work, long or compacted conversations, inaccessible final surfaces, or explicitly requested strict validation.
 
 ## Development and evaluation
 
@@ -137,11 +143,11 @@ See [SKILL.md](no-negative-echo/SKILL.md) for the default workflow. Sensitive da
 python3 -I -m unittest discover -s tests -p 'test_*.py'
 ```
 
-The evaluation protocol and public cases are in [`evals/`](evals/). CI runs deterministic scripts and scorer tests; it does not make model-effectiveness claims.
+The evaluation protocol and public development cases are in [`evals/`](evals/). CI tests the package, installer, scanner, and evaluation scorer. These tests check software behavior; they do not measure how effectively a model follows the skill. Behavioral evaluation requires isolated model runs and independent judgments, and reports the available host activation evidence separately under the documented protocol.
 
 ## Further reading
 
-- [Installation contract](INSTALL.md)
+- [Installation instructions](INSTALL.md)
 - [Background](BACKGROUND.md)
 - [Evaluation protocol](evals/evaluation-protocol.md)
 - [License](LICENSE)

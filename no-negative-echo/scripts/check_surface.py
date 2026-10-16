@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check exact terms across final text surfaces without printing matched values."""
+"""Check text and paths for normalized term matches without printing matches."""
 
 from __future__ import annotations
 
@@ -214,15 +214,22 @@ def _relative_path_surface(path: Path, root: Path) -> str:
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Check final text files and filenames for exact forbidden terms."
+        description="Check text files and filenames for normalized substring matches."
     )
-    parser.add_argument("--terms-file", required=True, type=Path)
+    parser.add_argument(
+        "--terms-file",
+        required=True,
+        type=Path,
+        help="nonempty UTF-8 file with one non-sensitive term to check per line",
+    )
     parser.add_argument(
         "--root",
         type=Path,
-        help="scan each file's root-relative path, including directory names",
+        help="also check directory names in each supplied file's root-relative path",
     )
-    parser.add_argument("paths", nargs="+", type=Path)
+    parser.add_argument(
+        "paths", nargs="+", type=Path, help="text files to scan; directories are not traversed"
+    )
     args = parser.parse_args()
 
     try:

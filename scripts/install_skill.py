@@ -24,7 +24,7 @@ PROVENANCE_FILE = Path(".no-negative-echo-provenance.json")
 PACKAGE_ID = "io.github.lb623.no-negative-echo"
 SOURCE_REPOSITORY = "https://github.com/LB623/no-negative-echo"
 CURRENT_PROVENANCE_SHA256 = (
-    "d42280b21f519ea00e417c68f31c68ca3d7faae607faf6dcb6e04beeff9c5ed6"
+    "742aa92626d1fb6e18f921a0bd321c258455a215934c8f5029c19b216b59f07e"
 )
 RUNTIME_FILES = frozenset(
     {
@@ -39,6 +39,18 @@ RUNTIME_FILES = frozenset(
     }
 )
 PREVIOUS_PROVENANCE_RUNTIME_FILES: dict[str, frozenset[Path]] = {
+    "d42280b21f519ea00e417c68f31c68ca3d7faae607faf6dcb6e04beeff9c5ed6": frozenset(
+        {
+            PROVENANCE_FILE,
+            Path("SKILL.md"),
+            Path("agents/openai.yaml"),
+            Path("assets/decision-boundary.png"),
+            Path("assets/icon-400.png"),
+            Path("assets/icon.png"),
+            Path("references/high-assurance-finalization.md"),
+            Path("scripts/check_surface.py"),
+        }
+    ),
     "9cc10a0f1d2d87f0de8517bf40c59e364783e2410308a0c8f815288f53a7cc47": frozenset(
         {
             PROVENANCE_FILE,

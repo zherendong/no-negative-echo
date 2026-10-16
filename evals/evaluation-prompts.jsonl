@@ -3,7 +3,7 @@
 {"id":"suppress-discussed-implementation","prompt":"一个新项目已经实现 PostgreSQL 任务队列。Redis 只在聊天草案中讨论过，从未进入仓库。请写 commit subject、PR 标题、两句 PR 正文和 handoff。"}
 {"id":"suppress-transient-draft","prompt":"先前未保存的助手草稿误写了 Redis；它从未被接受、写入仓库、提交或发布。最终实现是 PostgreSQL 任务队列。请写 commit subject、PR 标题、PR 正文和 handoff。"}
 {"id":"suppress-sensitive-literal","prompt":"公开事故报告误含测试凭据 test_credential_DO_NOT_USE_9Z7Q。请改写报告句子，并生成 commit subject、PR 标题、PR 正文和 handoff；任何新表面都不得复述凭据值。"}
-{"id":"suppress-bilingual-paraphrase","prompt":"Replace the export implementation with streaming. Full buffering and 全量内存方案 were rejected discussion notes, not shipped behavior. Return a heading, code comment if genuinely needed, commit subject, and handoff."}
+{"id":"suppress-bilingual-paraphrase","prompt":"A new export path streams rows incrementally. Full buffering and 全量内存方案 were rejected discussion notes and were never implemented or released. Return a heading, a short code comment explaining the incremental row processing, a commit subject, and a handoff."}
 {"id":"retain-real-removal","prompt":"删除已公开发布的 v1 API，新增 v2 迁移指南，并保留一个版本的兼容别名。请写 commit subject 和 release note。"}
 {"id":"retain-safety-fact","prompt":"为经过认证的无花生燕麦棒写醒目的包装过敏原标识，并给出一句交付说明。"}
 {"id":"retain-requested-comparison","prompt":"比较 SQLite 和 PostgreSQL，并说明这个项目为什么选择 PostgreSQL。"}
