@@ -31,6 +31,30 @@ OTHER_DEFAULT_IGNORABLE_RANGES = (
     (0x1D173, 0x1D17A),
     (0xE0000, 0xE0FFF),
 )
+HELP_EPILOG = """\
+matching:
+  Terms and text are compared as substrings after Unicode NFKC normalization
+  and case folding, so paraphrases are not detected. Each file's contents and
+  name are checked. With --root, every file must be inside that root, under
+  ordinary directories rather than symbolic links, and the directory names
+  between the root and the file are checked too; without --root, only the
+  file's basename is checked.
+
+inputs:
+  Each file must be a regular file (not a symbolic link) of at most 16 MiB,
+  encoded as UTF-8 or as UTF-16 with a byte order mark. The terms file is
+  UTF-8 with one term per line; terms containing invisible or bidirectional
+  control characters are rejected.
+
+output and exit status:
+  One JSON line is printed; matched terms and file paths are never printed.
+  0  PASS    no term matched and no characters need review
+  1  FAIL    a term matched a file's contents or path
+  1  REVIEW  no term matched, but invisible or bidirectional characters
+             need inspection
+  2  ERROR   an input could not be scanned (see reason_code); invalid
+             command-line arguments also exit with 2
+"""
 
 
 class ScanInputError(ValueError):
@@ -214,7 +238,9 @@ def _relative_path_surface(path: Path, root: Path) -> str:
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Check text files and filenames for normalized substring matches."
+        description="Check text files and filenames for normalized substring matches.",
+        epilog=HELP_EPILOG,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument(
         "--terms-file",

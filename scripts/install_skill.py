@@ -24,7 +24,7 @@ PROVENANCE_FILE = Path(".no-negative-echo-provenance.json")
 PACKAGE_ID = "io.github.lb623.no-negative-echo"
 SOURCE_REPOSITORY = "https://github.com/LB623/no-negative-echo"
 CURRENT_PROVENANCE_SHA256 = (
-    "b0f8e6df199bdd335d18aa3213b2c180d9e9d0d4bcba276c6dc5b9c1cf6833bf"
+    "b4ae19d591959adb73e55c0e8b0c1a04c5f6e358800cbb51d79c454a705d09ef"
 )
 RUNTIME_FILES = frozenset(
     {

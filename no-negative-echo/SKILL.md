@@ -58,7 +58,7 @@ After a tool, hook, or external system creates or changes a surface, read the ac
 
 ### Optional text scan
 
-Use `scripts/check_surface.py` when known, non-sensitive terms should be absent from specific text files. Put one term per line in a nonempty UTF-8 file. With Python 3.10 or later, run from the installed skill directory, replacing the example paths:
+Use `scripts/check_surface.py` to confirm that known, non-sensitive terms are absent from specific text files. Put one term per line in a UTF-8 file. With Python 3.10 or later, run from the installed skill directory, replacing the example paths:
 
 ```bash
 python3 -I -B scripts/check_surface.py \
@@ -67,9 +67,7 @@ python3 -I -B scripts/check_surface.py \
   /path/to/project/result.md
 ```
 
-The scanner checks only the files explicitly supplied. It accepts regular UTF-8 text files and UTF-16 files with a byte order mark. It matches substrings after Unicode NFKC normalization and case folding, and checks file contents plus filenames. With `--root`, every supplied file must be inside that root, and the scanner also checks directory names in each file's path relative to it; this option does not enable recursive scanning. Without `--root`, path checks cover basenames only. Use separate scans when different surfaces permit different terms.
-
-`PASS` exits with 0; `FAIL` (a term matched) and `REVIEW` (certain invisible or bidirectional Unicode characters need inspection) exit with 1; `ERROR` (an input could not be scanned) exits with 2. A `PASS` does not establish that paraphrases are absent, required facts remain, or unscanned surfaces are correct. Review those aspects separately. Keep sensitive values out of the term list and tool arguments; use an appropriate secret or DLP scanner for those checks.
+List each file explicitly; the scanner checks file contents and names, plus directory names below `--root`, and does not search directories. A `PASS` does not establish that paraphrases are absent, required facts remain, or unscanned surfaces are correct. Use separate scans when different surfaces permit different terms. Keep sensitive values out of the term list and tool arguments; use an appropriate secret or data loss prevention scanner for those checks. Run the script with `--help` for its matching rules, accepted encodings, and exit statuses.
 
 ## High-assurance cases
 
