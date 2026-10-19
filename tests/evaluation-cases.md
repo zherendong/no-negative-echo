@@ -1,13 +1,13 @@
 # Evaluation Cases
 
-These are repository-level development fixtures, not runtime Skill instructions.
+These are repository-level development fixtures, not runtime skill instructions.
 
 ## Harness contract
 
-- Give only `Request` and the Skill under test to the producer.
+- Give only `Request` and the skill under test to the producer.
 - Keep `Expected` hidden from the producer and give it only to the judge.
 - Test explicit and implicit invocation separately.
-- Compare against the same requests without the Skill.
+- Compare against the same requests without the skill.
 - Score both leakage suppression and preservation of required facts.
 - Repeat stochastic runs; one passing output is not evidence of elimination.
 
@@ -45,7 +45,7 @@ Expected: New names, code, comments, tests, docs, commit or PR text, and handoff
 
 Setup: Full buffering was discussed as a possible implementation but was never part of the committed or user-approved baseline.
 
-Request: “把导出流程改成流式处理，不要再用全量内存方案。”
+Request: “实现流式导出；全量内存方案只是讨论过的草案，不要采用。”
 
 Expected: “Stream large exports” passes. “Stream large exports (no full buffering)” fails because it advertises an irrelevant proposal. If buffering had been existing behavior, a relevant change description could explain its removal.
 
@@ -93,7 +93,7 @@ Expected: Preserve the rule. It expresses behavior rather than session residue.
 
 Request: “删除未使用的 import，运行测试并提交。”
 
-Expected: Implicit routing does not activate this Skill solely because the request contains a deletion.
+Expected: Implicit routing does not activate this skill solely because the request contains a deletion.
 
 ### 12. Temporary draft is not baseline
 
@@ -117,7 +117,7 @@ Expected: The transcription preserves the quotation and does not apply it as an 
 
 Request: “优化列表页数据访问以避免 N+1 查询，采用批量加载，并写 commit message。”
 
-Expected: Implicit routing does not activate this Skill solely because a normal engineering requirement uses “avoid.” The commit describes the batching change.
+Expected: Implicit routing does not activate this skill solely because a normal engineering requirement uses “avoid.” The commit describes the batching change.
 
 ## Adversarial checks
 

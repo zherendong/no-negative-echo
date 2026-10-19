@@ -23,14 +23,16 @@ Otherwise, use the bundled installer:
    | GitHub Copilot CLI | `copilot` | `~/.copilot/skills` |
 
    These presets apply to local hosts with persistent filesystems. Do not guess
-   a destination for agents running in cloud, review, web, or temporary environments.
+   a destination for agents running in cloud, review, web, or temporary
+   environments.
 
 2. Clone the repository into a new temporary directory, then run from its root.
-   Use the installer, runtime directory, and expected digest from the same revision:
+   Use the installer, runtime directory, and expected digest from the same
+   revision:
 
    ```bash
    python3 -I -B scripts/install_skill.py \
-     --expected-provenance-sha256 742aa92626d1fb6e18f921a0bd321c258455a215934c8f5029c19b216b59f07e \
+     --expected-provenance-sha256 b0f8e6df199bdd335d18aa3213b2c180d9e9d0d4bcba276c6dc5b9c1cf6833bf \
      --agent HOST_PRESET
    ```
 
@@ -39,10 +41,10 @@ Otherwise, use the bundled installer:
    request credentials.
 
 3. Treat exit status 0 plus the printed `Installed no-negative-echo to ...`
-   path as successful file installation. This does not establish host activation.
-   If the host cannot reload skills in the current session, report that discovery
-   needs a new session; do not run
-   unrelated work merely to prove activation.
+   path as successful file installation. This does not establish host
+   activation. If the host cannot reload skills in the current session, report
+   that discovery needs a new session; do not run unrelated work merely to
+   prove activation.
 
 4. Remove only the temporary clone created for this installation.
 
@@ -50,9 +52,9 @@ The bundled installer performs the package checks itself: it validates the
 provenance manifest and file hashes, checks known conflicting installation
 locations, and verifies the destination, coordination locks, staged copy, and
 installed files. For a normal release installation, do **not** duplicate that
-work by reading every
-repository Python file, running the repository test suite, enumerating unrelated
-skill directories, or inspecting unrelated `package.json` files.
+work by reading every repository Python file, running the repository test
+suite, enumerating unrelated skill directories, or inspecting unrelated
+`package.json` files.
 
 ## Custom destinations and audits
 
@@ -60,7 +62,7 @@ For a custom destination, use only a documented skill root for that host:
 
 ```bash
 python3 -I -B scripts/install_skill.py \
-  --expected-provenance-sha256 742aa92626d1fb6e18f921a0bd321c258455a215934c8f5029c19b216b59f07e \
+  --expected-provenance-sha256 b0f8e6df199bdd335d18aa3213b2c180d9e9d0d4bcba276c6dc5b9c1cf6833bf \
   --skills-dir /absolute/path/to/skills \
   --discovery-root /absolute/path/to/skills
 ```

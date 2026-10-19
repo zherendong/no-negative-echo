@@ -12,7 +12,7 @@ Choose a baseline appropriate to each surface: the relevant PR merge base or sta
 
 ## Sensitive information
 
-For credentials, personal data, private codenames, and other confidential facts, establish what each audience and destination is authorized to receive. A need to report an event does not automatically authorize disclosing a sensitive value, a recognizable derivative, its category, or even its existence. Use the least revealing statement that remains accurate. If the task requires an exact value, use an already authorized destination; ask for direction only when that authorization or destination is missing.
+For credentials, personal data, private codenames, and other confidential facts, establish what each audience and destination is authorized to receive. A need to report an event does not automatically authorize disclosing a sensitive value, a recognizable derivative, its category, or even its existence. Use the least revealing statement that remains accurate. If the task requires an exact value, send it only to a destination the user has authorized for that value. If no such destination exists, ask for direction; do not silently substitute a placeholder or publish the value elsewhere.
 
 Keep raw sensitive values out of producer and validator prompts, shell commands, tool arguments, and logs. Use a trusted secret or data loss prevention (DLP) scanner when such checks are required. The bundled text scanner is intended for non-sensitive terms whose absence is appropriate to check on the specified surfaces.
 

@@ -9,14 +9,14 @@ host-scoped evaluation; this protocol does not require testing every agent that
 can install or read the package. Package-format compatibility, successful file
 installation, and skill-list discovery are not evidence of behavioral efficacy.
 The primary four-condition design requires a reference host that supports
-native Skill discovery plus explicit and implicit invocation; evaluate a
+native skill discovery plus explicit and implicit invocation; evaluate a
 manual-loading fallback separately.
 
 ## Integrity boundary
 
-Run each producer in a fresh, isolated working directory that contains only the synthetic task files and the assigned runtime Skill. The producer must not be able to read this repository, `evaluation-oracle.jsonl`, judgments, prior outputs, or another condition's artifacts. Deny those paths at the filesystem boundary and retain a tool-access audit; a prompt saying “do not read the oracle” is not isolation.
+Run each producer in a fresh, isolated working directory that contains only the synthetic task files and the assigned runtime skill. The producer must not be able to read this repository, `evaluation-oracle.jsonl`, judgments, prior outputs, or another condition's artifacts. Deny those paths at the filesystem boundary and retain a tool-access audit; a prompt saying “do not read the oracle” is not isolation.
 
-Before execution, freeze an evaluation manifest containing the declared `reference_host`, every scheduled `run_id`, case ID, condition, prompt checksum, required surface names, model and snapshot, sampling settings, harness and host version, system-instruction checksum, Skill checksum and discovery path, installed Skill inventory, working directory, context limit, compaction setting, and random seed where supported. Missing and crashed scheduled runs stay in the denominator. The scorer's `--expected-run-ids` file lists the scheduled run IDs, one per line. Each run ID represents one repetition of the complete case set for that condition; the scorer expects every case in the oracle for every listed run ID.
+Before execution, freeze an evaluation manifest containing the declared `reference_host`, every scheduled `run_id`, case ID, condition, prompt checksum, required surface names, model and snapshot, sampling settings, harness and host version, system-instruction checksum, skill checksum and discovery path, installed skill inventory, working directory, context limit, compaction setting, and random seed where supported. Missing and crashed scheduled runs stay in the denominator. The scorer's `--expected-run-ids` file lists the scheduled run IDs, one per line. Each run ID represents one repetition of the complete case set for that condition; the scorer expects every case in the oracle for every listed run ID.
 
 Keep four roles separate:
 
@@ -27,7 +27,7 @@ Keep four roles separate:
 4. A separate adjudicator resolves any disagreement without editing the output.
 
 The evaluator owns all parsing, normalization, exact matching, hashing, and
-scoring code. It must never import or execute the candidate Skill, its scanner,
+scoring code. It must never import or execute the candidate skill, its scanner,
 or any producer-supplied module. Run the scorer from a read-only,
 evaluator-controlled checkout with Python isolated mode. Treat every frozen
 surface as untrusted data: judge prompts delimit it as quoted artifact content,
@@ -48,27 +48,27 @@ routing traces. Retain that digest with the immutable evaluation manifest and
 published result. It detects later bundle substitution; it is not a signature
 and does not authenticate who collected the evidence.
 
-Public fixtures are a development set. Generalization claims require an independently authored holdout unavailable to producers, judges, and Skill authors during iteration.
+Public fixtures are a development set. Generalization claims require an independently authored holdout unavailable to producers, judges, and skill authors during iteration.
 
 ## Conditions
 
 Run fresh sessions under all conditions on the declared reference host:
 
-- `no-skill`: the Skill is absent;
-- `comparator`: inject the exact frozen text in [`comparator.txt`](comparator.txt), with no Skill metadata;
+- `no-skill`: the skill is absent;
+- `comparator`: inject the exact frozen text in [`comparator.txt`](comparator.txt), with no skill metadata;
 - `explicit`: explicitly invoke `no-negative-echo` using the reference host's documented syntax, and freeze that exact invocation in the manifest;
-- `implicit`: install the Skill but do not name it in the user turn.
+- `implicit`: install the skill but do not name it in the user turn.
 
-Do not tune the comparator after inspecting results. Because a host can expose Skill name and description before loading the full instructions, add a metadata-only diagnostic when attributing the mechanism. It is outside the scorer's four primary conditions: report it descriptively and do not relabel or pool it with `no-skill`, `comparator`, `explicit`, or `implicit`. Randomize condition order and pair seeds when the host permits it.
+Do not tune the comparator after inspecting results. Because a host can expose skill name and description before loading the full instructions, add a metadata-only diagnostic when attributing the mechanism. It is outside the scorer's four primary conditions: report it descriptively and do not relabel or pool it with `no-skill`, `comparator`, `explicit`, or `implicit`. Randomize condition order and pair seeds when the host permits it.
 
-For routing tests, pin the installed Skill inventory, discovery scope and current working directory. Repeat with crowded and overlapping Skill inventories before making deployment claims. A host-specific setting that permits implicit invocation, such as `allow_implicit_invocation: true`, permits routing; it does not prove activation.
+For routing tests, pin the installed skill inventory, discovery scope and current working directory. Repeat with crowded and overlapping skill inventories before making deployment claims. A host-specific setting that permits implicit invocation, such as `allow_implicit_invocation: true`, permits routing; it does not prove activation.
 
 Cross-host reproduction is optional. Each additional host is a separate
 replication with its own preregistered `reference_host`, manifest, four
 conditions, routing trace, and result. Do not pool it with the primary result
 unless a multi-host estimand and pooling method were preregistered. A manual
 instruction fallback is also a distinct experimental condition, not a native
-Skill replication.
+skill replication.
 
 ## Counterfactual and real-surface design
 
@@ -167,4 +167,4 @@ Pre-register the reference host, primary outcomes, comparator, sample size, excl
 
 Twenty to thirty stochastic repetitions per prompt and condition are a development floor, not proof of elimination. The rule-of-three approximation `3/n` assumes relevant independence and only bounds the tested distribution; repeated samples from a small prompt set do not create prompt-population generalization.
 
-Do not publish an efficacy percentage without the reference host and surface/version, condition, prompt population, holdout status, model, harness, run count, Skill inventory and discovery path, exact explicit-invocation form, routing observation coverage, confidence interval, both co-primary outcomes, comparator effect, and task-preservation result. A green unit-test badge proves scorer and package mechanics only, not model efficacy on that host or any other host.
+Do not publish an efficacy percentage without the reference host and surface/version, condition, prompt population, holdout status, model, harness, run count, skill inventory and discovery path, exact explicit-invocation form, routing observation coverage, confidence interval, both co-primary outcomes, comparator effect, and task-preservation result. A green unit-test badge proves scorer and package mechanics only, not model efficacy on that host or any other host.

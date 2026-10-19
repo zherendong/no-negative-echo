@@ -59,7 +59,7 @@ Local Codex example:
 git clone https://github.com/LB623/no-negative-echo.git
 cd no-negative-echo
 python3 -I -B scripts/install_skill.py \
-  --expected-provenance-sha256 742aa92626d1fb6e18f921a0bd321c258455a215934c8f5029c19b216b59f07e \
+  --expected-provenance-sha256 b0f8e6df199bdd335d18aa3213b2c180d9e9d0d4bcba276c6dc5b9c1cf6833bf \
   --agent codex
 ```
 
@@ -68,14 +68,14 @@ Use the installer, runtime files, and expected digest from the same revision. Th
 Explicitly invoke the skill before an important delivery:
 
 ```text
-Use $no-negative-echo.
+Use the no-negative-echo skill.
 Based on the final diff, write the commit subject, PR title, PR body, and handoff.
 ```
 
 For editorial work:
 
 ```text
-Use $no-negative-echo.
+Use the no-negative-echo skill.
 Rewrite the title and opening to reflect the final article body.
 ```
 
@@ -93,10 +93,10 @@ the reader did not see the working session.
 
 - Use rejected proposals, intermediate attempts, and wording corrections to guide the work. Omit them from the deliverable unless its readers need them.
 - Evaluate each surface separately: Would its readers need this information? Would omission make it inaccurate, unsafe, misleading, incompatible, or noncompliant? Does it need to explain a real change from the relevant committed, released, or user-approved baseline?
-- An instruction to omit a subject does not justify an assurance that it is absent. Rewrite titles, filenames, openings, and labels from the requested outcome when they still revolve around a discarded idea.
+- An instruction to omit a subject does not justify an assurance that it is absent: "Do not mention X" is not a reason to write "X-free." Rewrite titles, filenames, openings, and labels from the requested outcome when they still revolve around a discarded idea.
 - Preserve real changes, external actions that actually occurred, and necessary technical names, constraints, diagnostics, tests, and snapshots. Pre-existing user edits are not rejected drafts, even if uncommitted.
 - Base commit messages, PRs, and handoffs on changes attributable to this task and results actually inspected. Keep comparisons, quotations, audits, and migration explanations when requested or needed for that surface.
-- Review all user-visible text and metadata, including actual results after hooks or external tools modify them. Recheck after changes. Report material failures and verification limits, without adding an assurance that repeats an irrelevant exclusion.
+- Review all user-visible text and metadata, including actual results after hooks or external tools modify them. Recheck after changes. Report material failures and verification limits, but do not add assurances such as "no references to X remain."
 ```
 
 This option depends on the agent supporting `AGENTS.md`. Codex reads project instructions at the start of each run; after changing the file, start a new run or session to load the latest version. See the [official OpenAI documentation](https://learn.chatgpt.com/docs/agent-configuration/agents-md) for discovery details.
